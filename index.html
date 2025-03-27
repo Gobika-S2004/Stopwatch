@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #ff7e5f, #feb47b); /* Gradient Background */
+            background-image: url('your-image.jpg'); /* Replace with your image */
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        #stopwatch {
+            font-size: 3em;
+            margin: 20px;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 10px 20px;
+            border-radius: 10px;
+        }
+
+        button {
+            font-size: 1.2em;
+            margin: 10px;
+            padding: 12px 20px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        #laps {
+            margin-top: 20px;
+            text-align: left;
+            display: inline-block;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        li {
+            color: white;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Stopwatch</h1>
+    <div id="stopwatch">00:00:00</div>
+    <button onclick="startStopwatch()">Start</button>
+    <button onclick="pauseStopwatch()">Pause</button>
+    <button onclick="resetStopwatch()">Reset</button>
+    <button onclick="recordLap()">Lap</button>
+
+    <ul id="laps"></ul>
+
+    <script>
+        let timer;
+        let elapsedTime = 0;
+        let isRunning = false;
+
+        function startStopwatch() {
+            if (!isRunning) {
+                isRunning = true;
+                let startTime = Date.now() - elapsedTime;
+                timer = setInterval(() => {
+                    elapsedTime = Date.now() - startTime;
+                    updateDisplay();
+                }, 100);
+            }
+        }
+
+        function pauseStopwatch() {
+            isRunning = false;
+            clearInterval(timer);
+        }
+
+        function resetStopwatch() {
+            isRunning = false;
+            clearInterval(timer);
+            elapsedTime = 0;
+            updateDisplay();
+            document.getElementById("laps").innerHTML = "";
+        }
+
+        function recordLap() {
+            let lapTime = document.createElement("li");
+            lapTime.textContent = formatTime(elapsedTime);
+            document.getElementById("laps").appendChild(lapTime);
+        }
+
+        function updateDisplay() {
+            document.getElementById("stopwatch").textContent = formatTime(elapsedTime);
+        }
+
+        function formatTime(ms) {
+            let totalSeconds = Math.floor(ms / 1000);
+            let minutes = Math.floor(totalSeconds / 60);
+            let seconds = totalSeconds % 60;
+            let milliseconds = Math.floor((ms % 1000) / 10);
+            return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}:${String(milliseconds).padStart(2, '0')}`;
+        }
+    </script>
+
+</body>
+</html>
